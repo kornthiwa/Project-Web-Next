@@ -4,23 +4,33 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
+const options = [
+  "None",
+  "Atria",
+  "Callisto",
+  "Dione",
+  "Ganymede",
+  "Hangouts Call",
+  "Luna",
+  "Oberon",
+  "Phobos",
+  "Pyxis",
+  "Sedna",
+  "Titania",
+  "Triton",
+  "Umbriel",
+];
+
 const ITEM_HEIGHT = 48;
 
-export default function LongMenu({ onClickItem, items }: any) {
+export default function LongMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleMenuItemClick = (option: string) => {
-    handleClose();
-    onClickItem(option);
   };
 
   return (
@@ -50,11 +60,11 @@ export default function LongMenu({ onClickItem, items }: any) {
           },
         }}
       >
-        {items.map((option: string) => (
+        {options.map((option) => (
           <MenuItem
             key={option}
             selected={option === "Pyxis"}
-            onClick={() => handleMenuItemClick(option)}
+            onClick={handleClose}
           >
             {option}
           </MenuItem>
