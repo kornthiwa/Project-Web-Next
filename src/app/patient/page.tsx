@@ -44,17 +44,15 @@ export default function Home() {
 
   const columns: GridColDef[] = [
     {
-      field: "age",
+      field: "name",
       headerName: "Active",
       width: 100,
       disableColumnMenu: true,
       align: "center",
       headerAlign: "center",
       renderCell: (params: any) => {
-        const { rowIndex } = params;
-        console.log(params);
-
-        return <>{rowIndex}</>;
+        const { row } = params;
+        return <>{row.name}</>;
       },
     },
     {
