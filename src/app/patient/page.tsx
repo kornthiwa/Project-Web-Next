@@ -2,60 +2,115 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import TableComponents from "@/module/components/tableComponent";
-import { Box, Button, Chip } from "@mui/material"; // import Button
+import { Table } from "@/module/components/Table";
+import { Box, Button, Chip, Typography } from "@mui/material"; // import Button
 import DialogPatient from "./patient/DailogPatient";
-import { DataGrid } from "@mui/x-data-grid";
-import LongMenu from "./patient/MenuPatientTransfer";
+import { Pagination } from "@/module/components/Pagination";
 
 const TableRowCancel = ({ onClickRowFunction }: any) => {
   return [
     {
-      field: "active",
-      headerName: "Active",
+      render: (data: any) => {
+        return (
+          <>
+            <Typography>{data.active}</Typography>
+          </>
+        );
+      },
+      title: (
+        <>
+          <Typography>Active</Typography>
+        </>
+      ),
       width: 100,
       disableColumnMenu: true,
       align: "center",
       headerAlign: "center",
     },
     {
-      field: "_id",
-      headerName: "ID",
+      render: (data: any) => {
+        return (
+          <>
+            <Typography>{data._id}</Typography>
+          </>
+        );
+      },
+      title: (
+        <>
+          <Typography>ID</Typography>
+        </>
+      ),
       disableColumnMenu: true,
       align: "left",
       headerAlign: "center",
     },
     {
-      field: "name",
-      headerName: "ชื่อ",
+      render: (data: any) => {
+        return (
+          <>
+            <Typography>{data.name}</Typography>
+          </>
+        );
+      },
+      title: (
+        <>
+          <Typography>ชื่อ</Typography>
+        </>
+      ),
       width: 150,
       disableColumnMenu: true,
       align: "left",
       headerAlign: "center",
     },
     {
-      field: "age",
-      headerName: "อายุ",
+      render: (data: any) => {
+        return (
+          <>
+            <Typography>{data.age} ปี</Typography>
+          </>
+        );
+      },
+      title: (
+        <>
+          <Typography>อายุ</Typography>
+        </>
+      ),
       width: 250,
       disableColumnMenu: true,
       align: "center",
       headerAlign: "center",
-      renderCell: (params: any) => {
-        const { row } = params;
-        return <>{row.age + " ปี"}</>;
-      },
     },
     {
-      field: "symptoms",
-      headerName: "อาการ",
+      render: (data: any) => {
+        return (
+          <>
+            <Typography>{data.symptoms}</Typography>
+          </>
+        );
+      },
+      title: (
+        <>
+          <Typography>อาการ</Typography>
+        </>
+      ),
       width: 250,
       disableColumnMenu: true,
       align: "left",
       headerAlign: "center",
     },
     {
-      field: "phoneNumber",
-      headerName: "เบอร์โทร",
+      render: (data: any) => {
+        return (
+          <>
+            <Typography>{data.phoneNumber}</Typography>
+          </>
+        );
+      },
+      title: (
+        <>
+          <Typography>เบอร์โทร</Typography>
+        </>
+      ),
       type: "number",
       width: 100,
       disableColumnMenu: true,
@@ -63,65 +118,56 @@ const TableRowCancel = ({ onClickRowFunction }: any) => {
       headerAlign: "center",
     },
     {
-      field: "status",
-      headerName: "สถานะ",
+      render: (data: any) => {
+        let chipLabel = "";
+        let chipColor = "default";
+        switch (data.status) {
+          case 10:
+            chipLabel = "ยังไม่กรอกข้อมูล";
+            chipColor = "info";
+            break;
+          case 20:
+            chipLabel = "กำลังกรอกข้อมูล";
+            chipColor = "warning";
+            break;
+          case 30:
+            chipLabel = "กรอกข้อมูลสำเร็จ";
+            chipColor = "success";
+            break;
+          default:
+            chipLabel = "";
+        }
+        return <>das</>;
+      },
+      title: (
+        <>
+          <Typography>สถานะ</Typography>
+        </>
+      ),
       width: 200,
       align: "center",
       sortable: false,
       headerAlign: "center",
       disableColumnMenu: true,
-      renderCell: (params: any) => {
-        const { row } = params;
-        return (
-          <>
-            {row.status === 10 && (
-              <Chip
-                color="info"
-                disabled={false}
-                size="medium"
-                variant="outlined"
-                label="ยังไม่กรอกข้อมูล"
-              />
-            )}
-            {row.status === 20 && (
-              <Chip
-                color="warning"
-                disabled={false}
-                size="medium"
-                variant="outlined"
-                label="กำลังกรอกข้อมูล"
-              />
-            )}
-            {row.status === 30 && (
-              <Chip
-                color="success"
-                disabled={false}
-                size="medium"
-                variant="outlined"
-                label="กรอกข้อมูลสำเร็จ"
-              />
-            )}
-          </>
-        );
-      },
     },
     {
-      field: " ",
-      headerName: " ",
-      align: "center",
-      sortable: false,
-      disableColumnMenu: true,
-      headerAlign: "center",
-      renderCell: (params: any) => {
-        const { row } = params;
+      render: (data: any) => {
         return (
           <>
-            <Button variant="contained" onClick={() => onClickRowFunction(row)}>
+            <Button
+              variant="contained"
+              onClick={() => onClickRowFunction(data)}
+            >
               ส่งตัว
             </Button>
           </>
         );
       },
+      title: "",
+      align: "center",
+      sortable: false,
+      disableColumnMenu: true,
+      headerAlign: "center",
     },
   ];
 };
@@ -162,32 +208,21 @@ export default function Home() {
         <Button variant="outlined" onClick={handleClickOpen}>
           เพิ่มผู้ป่วยเข้ารับการรักษา
         </Button>
-        <DataGrid
-          sx={{ overflowX: "scroll", maxHeight: "400px" }}
-          rows={data || []}
-          columns={TableRowCancel(onClickRowFunction)}
-          getRowId={(row: any) => row._id}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-            },
-          }}
-          pageSizeOptions={[10, 20, 50]}
-          checkboxSelection={false}
-          rowSelection
-          scrollbarSize={100}
-          onPaginationModelChange={(e) => {
-            if (e.pageSize && e.pageSize > 10) {
-              console.log("Have Scroll");
-              // กระทำเพิ่มเติมเมื่อมีการเลื่อนหน้าของตารางที่มี Scroll
-            } else {
-              console.log("No Scroll");
-              // กระทำเพิ่มเติมเมื่อมีการเลื่อนหน้าของตารางที่ไม่มี Scroll
-            }
-          }}
-        />
+        <Table rows={TableRowCancel(onClickRowFunction)} data={data} />
 
         {renderDialog()}
+      </Box>
+
+      <Box sx={{ height: "100%", padding: "21px 24px" }}>
+        <Pagination
+          data-testid={"action-permission-pagination"}
+          onChangePage={(_, pageNumber) => null}
+          onChangePageSize={(size) => null}
+          total={0}
+          pageIndex={0 - 1}
+          pageSize={10}
+          totalPages={1}
+        />
       </Box>
     </div>
   );
