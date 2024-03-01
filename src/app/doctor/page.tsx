@@ -1,5 +1,7 @@
 "use client";
 
 export default function Home() {
-  return <div>Home </div>;
+  console.log("dasd");
+
+  return <div>Test</div>;
 }
