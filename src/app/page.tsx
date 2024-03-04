@@ -2,8 +2,8 @@
 
 import { Button, Card, Chip, Typography, styled } from "@mui/material";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { useQuery } from "react-query";
 
 export default function Home() {
   const {
