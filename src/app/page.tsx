@@ -48,7 +48,7 @@ export default function Home() {
         const { row } = params;
         return (
           <>
-            <Button onClick={() => onClickRowFunction(row)}>กด</Button>
+            <Button onClick={() => onClickRowFunction(row)}>กดdsaf</Button>
           </>
         );
       },
